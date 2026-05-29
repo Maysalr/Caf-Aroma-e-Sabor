@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+    <title>Dashboard</title>
+</head>
+<body>
+
+<div class="layout-sidebar">
+
+    <div th:replace="fragments/sidebar :: sidebar"></div>
+
+    <main class="conteudo-principal">
+
+        <div th:replace="fragments/navbar :: navbar(titulo='Dashboard')"></div>
+
+        <div class="area-conteudo">
+
+            <!-- KPI Cards -->
+            <div class="kpi-grid">
+
+                <div class="kpi-card">
+                    <div class="kpi-header">
+                        <span class="kpi-label">Total em Estoque</span>
+                        <span class="kpi-icon"><i class="ico ico-estoque ico-lg"></i></span>
+                    </div>
+                    <div class="kpi-value" th:text="${totalEstoque} + ' kg'">0</div>
+                    <div class="kpi-sub">unidades em estoque</div>
+                </div>
+
+                <div class="kpi-card kpi-alerta">
+                    <div class="kpi-header">
+                        <span class="kpi-label">Vencem em 7 dias</span>
+                        <span class="kpi-icon pulse"><i class="ico ico-alerta ico-lg"></i></span>
+                    </div>
+                    <div class="kpi-value" th:text="${qtdVencendo7} + ' lotes'">0</div>
+                    <div class="kpi-sub">requerem atencao imediata</div>
+                </div>
+
+                <div class="kpi-card kpi-atencao">
+                    <div class="kpi-header">
+                        <span class="kpi-label">Estoque Critico</span>
+                        <span class="kpi-icon"><i class="ico ico-atencao ico-lg"></i></span>
+                    </div>
+                    <div class="kpi-value" th:text="${qtdEstoqueCritico} + ' produtos'">0</div>
+                    <div class="kpi-sub">abaixo do estoque minimo</div>
+                </div>
+
+                <div class="kpi-card kpi-sucesso">
+                    <div class="kpi-header">
+                        <span class="kpi-label">Valor Total</span>
+                        <span class="kpi-icon"><i class="ico ico-dinheiro ico-lg"></i></span>
+                    </div>
+                    <div class="kpi-value" th:text="'R$ ' + ${#numbers.formatDecimal(valorTotal, 0, 'POINT', 2, 'COMMA')}">0</div>
+                    <div class="kpi-sub">valor total em estoque</div>
+                </div>
+
+            </div>
+
+            <!-- Alert Cards -->
+            <div class="secao-titulo"><i class="ico ico-alerta ico-md"></i> Alertas que Precisam de Acao Imediata</div>
+            <p style="font-size:13px;color:#888;margin:-12px 0 18px;">Produtos com validade proxima identificados automaticamente</p>
+
+            <div class="alertas-grid" th:if="${not #lists.isEmpty(vencendoEm7)}">
+                <div class="alerta-card" style="border-top-color:var(--cor-alerta);" th:each="produto : ${vencendoEm7}"
+                     th:if="${produto.diasRestantes ge 0 and produto.diasRestantes le 3}">
+                    <div class="alerta-header" style="background:var(--cor-alerta);">
+                        <i class="ico ico-alerta ico-md"></i> CRITICO - <span th:text="${produto.diasRestantes}"></span> dias
+                    </div>
+                    <div class="alerta-body">
+                        <div class="alerta-produto" th:text="${produto.nome}">Produto</div>
+                        <div class="alerta-lote" th:text="'Lote ' + ${produto.numeroLote} + ' | ' + ${produto.quantidade} + ' kg em estoque'"></div>
+                        <div class="alerta-valor" th:text="'R$ ' + ${#numbers.formatDecimal(produto.custoUnitario * produto.quantidade, 0, 'POINT', 2, 'COMMA')}"></div>
+                        <button class="btn-perigo btn-pequeno" title="Tomar acao">Tomar Acao</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alertas-grid" th:if="${#lists.isEmpty(vencendoEm7)}">
+                <div class="card" style="grid-column:1/-1;text-align:center;padding:30px;color:#888;">
+                    <i class="ico ico-check ico-lg" style="color:var(--cor-sucesso);"></i> Nenhum produto com vencimento critico no momento.
+                </div>
+            </div>
+
+            <!-- Bottom section -->
+            <div class="dashboard-bottom">
+
+                <!-- Recent movements -->
+                <div class="card">
+                    <div class="card-titulo"><i class="ico ico-lista ico-md"></i> Ultimas Movimentacoes</div>
+                    <div class="card-subtitulo" style="margin-bottom:0;">Registros recentes de entrada e saida</div>
+                    <div class="tabela-wrapper" style="margin-top:16px;">
+                        <table class="tabela-padrao">
+                            <thead>
+                                <tr>
+                                    <th>Data</th>
+                                    <th>Produto</th>
+                                    <th>Tipo</th>
+                                    <th>Quantidade</th>
+                                    <th>Responsavel</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="mov : ${ultimasMovimentacoes}">
+                                    <td th:text="${#temporals.format(mov.dataMovimentacao, 'dd/MM/yyyy')}"></td>
+                                    <td th:text="${mov.produto.nome}"></td>
+                                    <td>
+                                        <span th:classappend="${mov.tipo eq 'ENTRADA'} ? 'badge-ok' : 'badge-atencao'">
+                                            <i th:classappend="${mov.tipo eq 'ENTRADA'} ? 'ico ico-entrada' : 'ico ico-saida'" style="font-size:10px;"></i>
+                                            <span th:text="${mov.tipo}"></span>
+                                        </span>
+                                    </td>
+                                    <td th:text="${mov.quantidade} + ' kg'"></td>
+                                    <td th:text="${mov.responsavel}"></td>
+                                </tr>
+                                <tr th:if="${#lists.isEmpty(ultimasMovimentacoes)}">
+                                    <td colspan="5" style="text-align:center;color:#888;">Nenhuma movimentacao registrada.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Stock below minimum -->
+                <div class="card">
+                    <div class="card-titulo"><i class="ico ico-baixo ico-md"></i> Estoque Abaixo do Minimo</div>
+                    <div class="card-subtitulo">Produtos que precisam de reposicao</div>
+
+                    <div style="margin-top:16px;">
+                        <div class="estoque-item" th:each="prod : ${produtosEstoqueBaixo}">
+                            <div class="estoque-header">
+                                <span class="estoque-nome" th:text="${prod.nome}"></span>
+                                <span class="estoque-numeros" th:text="${prod.quantidade} + ' / ' + ${prod.estoqueMinimo} + ' kg'"></span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" th:classappend="${(prod.quantidade * 100 / prod.estoqueMinimo) < 50} ? 'baixo' : 'medio'"
+                                     th:style="'width:' + ${(prod.quantidade * 100 / prod.estoqueMinimo)} + '%'"></div>
+                            </div>
+                            <div class="estoque-actions">
+                                <button class="btn-primario btn-pequeno" th:title="'Repor ' + ${prod.nome}">Repor</button>
+                            </div>
+                        </div>
+                        <div th:if="${#lists.isEmpty(produtosEstoqueBaixo)}" style="text-align:center;padding:20px;color:#888;">
+                            <i class="ico ico-check" style="color:var(--cor-sucesso);"></i> Todos os produtos estao com estoque adequado.
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div th:replace="fragments/footer :: footer"></div>
+    </main>
+
+</div>
+
+<div th:replace="fragments/scripts-footer :: scripts-footer"></div>
+</body>
+</html>

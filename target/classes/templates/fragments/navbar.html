@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<body>
+<header class="header-pagina" th:fragment="navbar(titulo)">
+    <h2 th:text="${titulo}"></h2>
+    <div class="header-right">
+        <div class="notification-bell" title="Notificacoes">
+            <i class="ico ico-sino ico-lg"></i>
+            <span class="badge-count">3</span>
+        </div>
+        <span class="header-user">Administrador</span>
+        <span class="header-date" th:text="${#temporals.format(#temporals.createToday(), 'EEEE, dd/MM/yyyy')}"></span>
+    </div>
+</header>
+</body>
+</html>

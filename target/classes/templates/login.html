@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+    <title>Cafe Aroma & Sabor</title>
+</head>
+<body>
+
+<div class="login-container">
+
+    <div class="login-brand">
+        <div class="login-brand-content">
+            <div class="logo-icon svg-cup svg-cup-lg">
+                <svg viewBox="0 0 100 100">
+                    <rect x="25" y="35" width="40" height="38" rx="3"/>
+                    <path d="M65 45 Q78 45 78 56 Q78 64 65 60"/>
+                    <path d="M33 28 Q36 18 33 12" opacity="0.6"/>
+                    <path d="M45 28 Q48 21 45 16" opacity="0.6"/>
+                    <line x1="27" y1="50" x2="63" y2="50" opacity="0.3"/>
+                </svg>
+            </div>
+            <h1>Cafe Aroma &amp; Sabor</h1>
+            <p class="tagline">Do grao a sua xicara, com qualidade garantida</p>
+
+            <div class="diferenciais">
+                <div class="login-diferencial">
+                    <span class="dif-icon">
+                        <svg width="16" height="16" viewBox="0 0 100 100" fill="none" stroke="#C8963E" stroke-width="4" stroke-linecap="round">
+                            <rect x="25" y="35" width="40" height="38" rx="3"/>
+                            <path d="M65 45 Q78 45 78 56 Q78 64 65 60"/>
+                            <path d="M33 28 Q36 18 33 12" opacity="0.6"/>
+                            <path d="M45 28 Q48 21 45 16" opacity="0.6"/>
+                        </svg>
+                    </span>
+                    <span>Cafes Especiais e Graos Importados</span>
+                </div>
+                <div class="login-diferencial">
+                    <span class="dif-icon">
+                        <svg width="16" height="16" viewBox="0 0 100 100" fill="none" stroke="#C8963E" stroke-width="4" stroke-linecap="round">
+                            <rect x="20" y="30" width="60" height="40" rx="4"/>
+                            <line x1="40" y1="55" x2="60" y2="55"/>
+                            <line x1="50" y1="55" x2="50" y2="25"/>
+                        </svg>
+                    </span>
+                    <span>Controle Inteligente de Estoque</span>
+                </div>
+                <div class="login-diferencial">
+                    <span class="dif-icon">
+                        <svg width="16" height="16" viewBox="0 0 100 100" fill="none" stroke="#C8963E" stroke-width="4" stroke-linecap="round">
+                            <path d="M50 15 L50 35"/>
+                            <path d="M50 50 L50 55" stroke-width="5"/>
+                            <circle cx="50" cy="50" r="35"/>
+                        </svg>
+                    </span>
+                    <span>Alertas Automaticos de Validade</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="login-form-section">
+        <div class="login-card">
+
+            <div class="mobile-logo">
+                <div class="logo-icon svg-cup" style="justify-content:center;margin-bottom:8px;">
+                    <svg width="48" height="48" viewBox="0 0 100 100" fill="none" stroke="#4A2C2A" stroke-width="2.5" stroke-linecap="round">
+                        <rect x="25" y="35" width="40" height="38" rx="3"/>
+                        <path d="M65 45 Q78 45 78 56 Q78 64 65 60"/>
+                        <path d="M33 28 Q36 18 33 12" opacity="0.5"/>
+                        <path d="M45 28 Q48 21 45 16" opacity="0.5"/>
+                    </svg>
+                </div>
+                <h1>Cafe Aroma &amp; Sabor</h1>
+                <p class="tagline">Do grao a sua xicara</p>
+            </div>
+
+            <h2>Bem-vindo de volta</h2>
+            <p class="login-sub">Acesse o sistema de gestao</p>
+
+            <form th:action="@{/home}" method="get">
+                <div class="form-grupo">
+                    <label for="usuario">Usuario</label>
+                    <div class="input-wrapper">
+                        <span class="prefix-icon ico ico-user ico-md"></span>
+                        <input type="text" id="usuario" placeholder="Digite seu usuario" required>
+                    </div>
+                </div>
+
+                <div class="form-grupo">
+                    <label for="senha">Senha</label>
+                    <div class="input-wrapper">
+                        <span class="prefix-icon ico" style="opacity:0.5;">
+                            <svg width="16" height="16" viewBox="0 0 100 100" fill="none" stroke="#4A2C2A" stroke-width="6" stroke-linecap="round">
+                                <rect x="25" y="45" width="50" height="40" rx="6"/>
+                                <path d="M35 45 L35 30 Q35 15 50 15 Q65 15 65 30 L65 45"/>
+                            </svg>
+                        </span>
+                        <input type="password" id="senha" placeholder="Digite sua senha" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primario btn-full" title="Clique para acessar o sistema de gestao">
+                    <i class="ico ico-seta ico-md"></i> Entrar no Sistema
+                </button>
+            </form>
+
+            <p style="text-align:center;margin-top:16px;font-family:'Nunito',sans-serif;font-size:12px;color:#AAA;">
+                Sistema de Gestao de Almoxarifado v1.0
+            </p>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

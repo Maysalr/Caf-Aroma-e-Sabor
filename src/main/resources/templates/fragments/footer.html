@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<body>
+<footer th:fragment="footer" style="text-align:center;padding:20px;color:#8B6F5E;font-size:13px;border-top:1px solid #E0D5CC;margin-top:40px;font-family:'Nunito',sans-serif;">
+    &copy; <span th:text="${#temporals.year(#temporals.createToday())}"></span> Cafe Aroma &amp; Sabor — Sistema de Gestao de Almoxarifado
+</footer>
+</body>
+</html>

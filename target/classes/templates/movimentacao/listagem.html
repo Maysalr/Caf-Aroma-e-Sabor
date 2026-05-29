@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+    <title>Movimentacao</title>
+</head>
+<body>
+
+<div class="layout-sidebar">
+
+    <div th:replace="fragments/sidebar :: sidebar"></div>
+
+    <main class="conteudo-principal">
+
+        <div th:replace="fragments/navbar :: navbar(titulo='Gestao de Estoque')"></div>
+
+        <div class="area-conteudo">
+
+            <!-- Movement Form -->
+            <div class="card" style="margin-bottom:24px;">
+                <div class="card-titulo"><i class="ico ico-lista ico-md"></i> Registrar Movimentacao de Estoque</div>
+                <div class="card-subtitulo">Registre entradas e saidas de produtos do almoxarifado</div>
+
+                <form th:action="@{/movimentacao/salvar}" th:object="${movimentacao}" method="post">
+
+                    <input type="hidden" th:field="*{id}" />
+
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+
+                        <div class="form-grupo">
+                            <label for="produto" class="form-label">Selecionar Produto*</label>
+                            <select id="produto" class="form-select" th:field="*{produto.id}" required>
+                                <option value="">Selecione um produto...</option>
+                                <option th:each="p : ${produtos}" th:value="${p.id}" th:text="${p.nome}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-grupo">
+                            <label class="form-label">Tipo de Movimentacao*</label>
+                            <div style="display:flex;gap:8px;">
+                                <button type="button" class="movimento-btn entrada selecionado" id="btnEntrada"
+                                        onclick="selecionarMovimento('entrada')" style="flex:1;" title="Registrar entrada">
+                                    <i class="ico ico-entrada"></i> ENTRADA
+                                </button>
+                                <button type="button" class="movimento-btn saida" id="btnSaida"
+                                        onclick="selecionarMovimento('saida')" style="flex:1;" title="Registrar saida">
+                                    <i class="ico ico-saida"></i> SAIDA
+                                </button>
+                            </div>
+                            <input type="hidden" name="tipo" id="tipoInput" value="ENTRADA" />
+                        </div>
+
+                        <div class="form-grupo">
+                            <label for="quantidade" class="form-label">Quantidade*</label>
+                            <input type="number" id="quantidade" class="form-input" th:field="*{quantidade}" placeholder="0" required min="1">
+                        </div>
+
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+
+                        <div class="form-grupo">
+                            <label for="dataMovimentacao" class="form-label">Data da Movimentacao*</label>
+                            <input type="date" id="dataMovimentacao" class="form-input" th:field="*{dataMovimentacao}" required>
+                        </div>
+
+                        <div class="form-grupo">
+                            <label for="responsavel" class="form-label">Responsavel</label>
+                            <input type="text" id="responsavel" class="form-input" th:field="*{responsavel}" placeholder="Nome do responsavel">
+                        </div>
+
+                        <div></div>
+
+                    </div>
+
+                    <div class="form-grupo">
+                        <label for="observacoes" class="form-label">Observacoes (opcional)</label>
+                        <textarea id="observacoes" class="form-input" th:field="*{observacoes}" rows="2" placeholder="Motivo, numero do pedido, informacoes adicionais..."></textarea>
+                    </div>
+
+                    <button type="submit" class="btn-primario btn-full" style="margin-top:8px;" title="Registrar movimentacao no sistema">
+                        <i class="ico ico-check ico-md"></i> Registrar Movimentacao
+                    </button>
+
+                </form>
+            </div>
+
+            <!-- Movement History -->
+            <div class="card">
+                <div class="card-header-flex">
+                    <div>
+                        <div class="card-titulo"><i class="ico ico-estoque ico-md"></i> Historico de Movimentacoes</div>
+                        <div class="card-subtitulo" style="margin-bottom:0;">Registros de entrada e saida</div>
+                    </div>
+                    <span class="badge-contagem" th:text="${#lists.size(movimentacoes)} + ' registros'"></span>
+                </div>
+
+                <div class="tabela-wrapper" style="margin-top:16px;">
+                    <table class="tabela-padrao">
+                        <thead>
+                            <tr>
+                                <th>Data</th>
+                                <th>Tipo</th>
+                                <th>Produto</th>
+                                <th>Lote</th>
+                                <th>Quantidade</th>
+                                <th>Responsavel</th>
+                                <th>Observacao</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="mov : ${movimentacoes}">
+                                <td th:text="${#temporals.format(mov.dataMovimentacao, 'dd/MM/yyyy')}"></td>
+                                <td>
+                                    <span th:classappend="${mov.tipo eq 'ENTRADA'} ? 'badge-ok' : 'badge-atencao'">
+                                        <i th:classappend="${mov.tipo eq 'ENTRADA'} ? 'ico ico-entrada' : 'ico ico-saida'" style="font-size:10px;"></i>
+                                        <span th:text="${mov.tipo}"></span>
+                                    </span>
+                                </td>
+                                <td th:text="${mov.produto.nome}"></td>
+                                <td th:text="${mov.produto.numeroLote}"></td>
+                                <td th:text="${mov.quantidade}"></td>
+                                <td th:text="${mov.responsavel}"></td>
+                                <td th:text="${mov.observacoes}"></td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(movimentacoes)}">
+                                <td colspan="7" style="text-align:center;padding:30px;color:#888;">
+                                    Nenhuma movimentacao registrada. Registre a primeira acima.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+
+        <div th:replace="fragments/footer :: footer"></div>
+    </main>
+
+</div>
+
+<div th:replace="fragments/scripts-footer :: scripts-footer"></div>
+
+<script>
+    function selecionarMovimento(tipo) {
+        var btnEntrada = document.getElementById('btnEntrada');
+        var btnSaida = document.getElementById('btnSaida');
+        var hiddenInput = document.getElementById('tipoInput');
+
+        if (tipo === 'entrada') {
+            btnEntrada.classList.add('selecionado');
+            btnSaida.classList.remove('selecionado');
+            hiddenInput.value = 'ENTRADA';
+        } else {
+            btnSaida.classList.add('selecionado');
+            btnEntrada.classList.remove('selecionado');
+            hiddenInput.value = 'SAIDA';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var dateField = document.getElementById('dataMovimentacao');
+        if (dateField && !dateField.value) {
+            var hoje = new Date();
+            var mes = String(hoje.getMonth() + 1).padStart(2, '0');
+            var dia = String(hoje.getDate()).padStart(2, '0');
+            dateField.value = hoje.getFullYear() + '-' + mes + '-' + dia;
+        }
+    });
+</script>
+
+</body>
+</html>

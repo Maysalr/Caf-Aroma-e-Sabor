@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<body>
+<aside class="sidebar" th:fragment="sidebar">
+
+    <div class="sidebar-logo">
+        <span class="logo-icon svg-cup svg-cup-md">
+            <svg viewBox="0 0 100 100">
+                <rect x="25" y="35" width="40" height="38" rx="3"/>
+                <path d="M65 45 Q78 45 78 56 Q78 64 65 60"/>
+                <path d="M33 28 Q36 18 33 12" opacity="0.6"/>
+                <path d="M45 28 Q48 21 45 16" opacity="0.6"/>
+            </svg>
+        </span>
+        <div class="logo-name">Cafe Aroma &amp; Sabor</div>
+    </div>
+    <div class="sidebar-divider"></div>
+
+    <div class="sidebar-user">
+        <div class="user-avatar">A</div>
+        <div class="user-info">
+            <div class="user-name">Administrador</div>
+            <div class="user-role">Administrador</div>
+        </div>
+    </div>
+
+    <nav class="sidebar-menu">
+        <a th:classappend="${paginaAtiva eq 'home'} ? 'ativo'" th:href="@{/home}" title="Dashboard">
+            <i class="ico ico-dash ico-md"></i> Dashboard
+        </a>
+        <a th:classappend="${paginaAtiva eq 'produto'} ? 'ativo'" th:href="@{/produto}" title="Cadastro de Produto">
+            <i class="ico ico-tag ico-md"></i> Cadastro de Produto
+        </a>
+        <a th:classappend="${paginaAtiva eq 'movimentacao'} ? 'ativo'" th:href="@{/movimentacao}" title="Gestao de Estoque">
+            <i class="ico ico-estoque ico-md"></i> Gestao de Estoque
+        </a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <button class="logout-btn" onclick="window.location.href='/login'" title="Encerrar sessao">
+            <i class="ico ico-sair ico-md"></i> Logout
+        </button>
+        <div class="sidebar-version">v1.0.0</div>
+    </div>
+
+</aside>
+</body>
+</html>

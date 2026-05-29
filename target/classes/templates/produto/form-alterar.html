@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+    <title>Editar Produto</title>
+</head>
+<body>
+
+<div class="layout-sidebar">
+
+    <div th:replace="fragments/sidebar :: sidebar"></div>
+
+    <main class="conteudo-principal">
+
+        <div th:replace="fragments/navbar :: navbar(titulo='Editar Produto')"></div>
+
+        <div class="area-conteudo">
+
+            <div class="card">
+                <div class="card-titulo"><i class="ico ico-edit ico-md"></i> Editar Produto</div>
+                <div class="card-subtitulo">Altere os dados do produto e do lote</div>
+
+                <form th:action="@{/produto/salvar}" th:object="${produto}" method="post">
+
+                    <input type="hidden" th:field="*{id}" />
+
+                    <div class="form-grupo">
+                        <label for="nome" class="form-label">Nome do Produto*</label>
+                        <input type="text" id="nome" class="form-input" th:field="*{nome}" placeholder="Ex: Cafe Etiopia Yirgacheffe" required>
+                    </div>
+
+                    <div class="form-grupo">
+                        <label for="categoria" class="form-label">Categoria*</label>
+                        <select id="categoria" class="form-select" th:field="*{categoria}">
+                            <option value="">Selecione uma categoria</option>
+                            <option value="Cafe Especial">Cafe Especial</option>
+                            <option value="Grao Importado">Grao Importado</option>
+                            <option value="Produto Gourmet">Produto Gourmet</option>
+                            <option value="Acessorio">Acessorio</option>
+                            <option value="Embalagem">Embalagem</option>
+                        </select>
+                    </div>
+
+                    <div class="form-grupo">
+                        <label for="descricao" class="form-label">Descricao</label>
+                        <textarea id="descricao" class="form-input" th:field="*{descricao}" rows="3" placeholder="Descreva o produto, origem, caracteristicas..."></textarea>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                        <div class="form-grupo">
+                            <label for="numeroLote" class="form-label">Numero do Lote*</label>
+                            <input type="text" id="numeroLote" class="form-input" th:field="*{numeroLote}" placeholder="Ex: LOTE-2025-001" required>
+                        </div>
+                        <div class="form-grupo">
+                            <label for="origemPais" class="form-label">Origem/Pais</label>
+                            <select id="origemPais" class="form-select" th:field="*{origemPais}">
+                                <option value="">Selecione a origem</option>
+                                <option value="Brasil">Brasil</option>
+                                <option value="Etiopia">Etiopia</option>
+                                <option value="Colombia">Colombia</option>
+                                <option value="Guatemala">Guatemala</option>
+                                <option value="Jamaica">Jamaica</option>
+                                <option value="Outros">Outros</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                        <div class="form-grupo">
+                            <label for="dataFabricacao" class="form-label">Data de Fabricacao</label>
+                            <input type="date" id="dataFabricacao" class="form-input" th:field="*{dataFabricacao}">
+                        </div>
+                        <div class="form-grupo">
+                            <label for="dataValidade" class="form-label">Data de Validade*</label>
+                            <input type="date" id="dataValidade" class="form-input" th:field="*{dataValidade}" required>
+                        </div>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+                        <div class="form-grupo">
+                            <label for="estoqueMinimo" class="form-label">Estoque Minimo*</label>
+                            <input type="number" id="estoqueMinimo" class="form-input" th:field="*{estoqueMinimo}" placeholder="Ex: 10" required>
+                        </div>
+                        <div class="form-grupo">
+                            <label for="quantidade" class="form-label">Quantidade</label>
+                            <input type="number" id="quantidade" class="form-input" th:field="*{quantidade}" placeholder="0">
+                        </div>
+                    </div>
+
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;">
+                        <div class="form-grupo">
+                            <label for="unidadeMedida" class="form-label">Unidade</label>
+                            <select id="unidadeMedida" class="form-select" th:field="*{unidadeMedida}">
+                                <option value="kg">kg</option>
+                                <option value="g">g</option>
+                                <option value="unidade">unidade</option>
+                                <option value="caixa">caixa</option>
+                                <option value="fardo">fardo</option>
+                                <option value="pacote">pacote</option>
+                            </select>
+                        </div>
+                        <div class="form-grupo">
+                            <label for="custoUnitario" class="form-label">Custo Unitario (R$)</label>
+                            <input type="number" id="custoUnitario" class="form-input" th:field="*{custoUnitario}" step="0.01" placeholder="0,00">
+                        </div>
+                        <div class="form-grupo">
+                            <label for="fornecedor" class="form-label">Fornecedor</label>
+                            <input type="text" id="fornecedor" class="form-input" th:field="*{fornecedor}" placeholder="Nome do fornecedor">
+                        </div>
+                    </div>
+
+                    <div class="form-grupo">
+                        <label for="localizacaoAlmoxarifado" class="form-label">Localizacao no Almoxarifado</label>
+                        <input type="text" id="localizacaoAlmoxarifado" class="form-input" th:field="*{localizacaoAlmoxarifado}" placeholder="Ex: Prateleira A3 - Setor 2">
+                    </div>
+
+                    <div class="form-grupo">
+                        <label for="observacoes" class="form-label">Observacoes</label>
+                        <textarea id="observacoes" class="form-input" th:field="*{observacoes}" rows="2" placeholder="Observacoes adicionais..."></textarea>
+                    </div>
+
+                    <div style="display:flex;gap:12px;margin-top:8px;">
+                        <button type="submit" class="btn-primario" title="Salvar alteracoes">
+                            <i class="ico ico-save ico-md"></i> Salvar Alteracoes
+                        </button>
+                        <a th:href="@{/produto}" class="btn-secundario" title="Cancelar">
+                            Cancelar
+                        </a>
+                    </div>
+
+                </form>
+            </div>
+
+        </div>
+
+        <div th:replace="fragments/footer :: footer"></div>
+    </main>
+
+</div>
+
+<div th:replace="fragments/scripts-footer :: scripts-footer"></div>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments/head :: head">
+    <title>Produtos</title>
+</head>
+<body>
+
+<div class="layout-sidebar">
+
+    <div th:replace="fragments/sidebar :: sidebar"></div>
+
+    <main class="conteudo-principal">
+
+        <div th:replace="fragments/navbar :: navbar(titulo='Cadastro de Produto')"></div>
+
+        <div class="area-conteudo">
+
+            <div class="card">
+                <div class="card-header-flex">
+                    <div>
+                        <div class="card-titulo"><i class="ico ico-lista ico-md"></i> Produtos Cadastrados</div>
+                        <div class="card-subtitulo" style="margin-bottom:0;">Acompanhe todos os lotes em estoque</div>
+                    </div>
+                    <div>
+                        <a th:href="@{/produto/form-inserir}" class="btn-primario btn-pequeno" style="text-decoration:none;">
+                            <i class="ico ico-plus"></i> Novo Produto
+                        </a>
+                    </div>
+                </div>
+
+                <div class="ferramentas-bar" style="margin-top:16px;">
+                    <input type="text" class="form-input" placeholder="Buscar produto pelo nome..." style="flex:1;">
+                </div>
+
+                <div class="tabela-wrapper">
+                    <table class="tabela-padrao">
+                        <thead>
+                            <tr>
+                                <th>Produto</th>
+                                <th>Lote</th>
+                                <th>Categoria</th>
+                                <th>Validade</th>
+                                <th>Dias Rest.</th>
+                                <th>Qtd.</th>
+                                <th>Status</th>
+                                <th>Acoes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="prod : ${produtos}"
+                                th:classappend="${prod.linhaClass}">
+                                <td><strong th:text="${prod.nome}">Produto</strong></td>
+                                <td th:text="${prod.numeroLote}">LOTE</td>
+                                <td th:text="${prod.categoria}"></td>
+                                <td th:text="${#temporals.format(prod.dataValidade, 'dd/MM/yyyy')}"></td>
+                                <td>
+                                    <span th:classappend="${prod.badgeClassDias}" th:text="${prod.vencido} ? 'VENCIDO' : ${prod.diasRestantes}"></span>
+                                </td>
+                                <td th:text="${prod.quantidade} + ' ' + ${prod.unidadeMedida}"></td>
+                                <td>
+                                    <span th:classappend="${prod.badgeClass}" th:text="${prod.statusTexto}"></span>
+                                </td>
+                                <td class="acoes-cell">
+                                    <a th:href="@{/produto/form-alterar/{id}(id=${prod.id})}" class="btn-primario btn-pequeno" title="Editar produto" style="text-decoration:none;">
+                                        <i class="ico ico-edit"></i>
+                                    </a>
+                                    <a th:href="@{/produto/excluir/{id}(id=${prod.id})}" class="btn-perigo btn-pequeno" title="Excluir produto"
+                                       onclick="return confirm('Tem certeza que deseja excluir este produto?')" style="text-decoration:none;">
+                                        <i class="ico ico-lixo"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(produtos)}">
+                                <td colspan="8" style="text-align:center;padding:30px;color:#888;">
+                                    Nenhum produto cadastrado. <a th:href="@{/produto/form-inserir}" style="color:var(--cor-secundaria);font-weight:600;">Cadastre o primeiro.</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div th:replace="fragments/footer :: footer"></div>
+    </main>
+
+</div>
+
+<div th:replace="fragments/scripts-footer :: scripts-footer"></div>
+</body>
+</html>
